@@ -1,4 +1,4 @@
-from ship import Ship
+from board import Board
 
-s = Ship()
-# print(s.)
+b = Board()
+print(b.board_ship_locations)
