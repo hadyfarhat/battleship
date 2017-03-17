@@ -1,3 +1,5 @@
+import pdb
+
 class Board():
 	SHIPS = [
 	    ("Aircraft Carrier", 5),
@@ -7,62 +9,76 @@ class Board():
 	    ("Patrol Boat", 2)
 	]
 
-	board_ship_locations = []
+	ship_board_locations = []
 
 	def __init__(self):
-		self.get_ships_location()
+		self.get_ship_location()
 
-	# prompts the user to place each ship in the board 
-	def get_ships_location(self):
+	# gets the x and y of ship
+	def get_ship_location(self):
 		for ship in range(len(self.SHIPS)):
-			while True:
-				ship_location = input("Where do you want"
-									   "to place {}: ".format(self.SHIPS[ship]))
-				if self.validate_input(ship_location):
-					print("Location validated")
-					if self.check_if_ship_location_exists(ship_location):
-						print("Location already in use")
-						continue
-					else:
-						ship_horizontal_or_vertical = input("Do you want to"
-															"place the ship"
-															"Horizentolly or"
-															"VerticallY ?")
-						if ship_horizontal_or_vertical == 'v':
-							print("VerticallY")
-							if self.validate_vertical_location_on_board(
-												self.SHIPS[ship][1], ship_location[1]):
-								print("ship location vertical validated")
-								self.get_vertical_ship_location(self.SHIPS[ship][1],
-																int(ship_location[1]))
-							else:
-								print("Ship is out of board")
-				else:
-					print("Ship input is not valid")
+			print("Where do you want to place {} ?".format(self.SHIPS[ship]))
+			ship_location_x = int(input("X1: "))
+			ship_location_y	= int(input("Y1: "))
+			if self.validate_ship_location(ship_location_x, ship_location_y):
+				print("Ship location validated")
+				if self.validate_and_add_ship_board_location(ship_location_x,
+											    	 		 ship_location_y,
+											    	 		 self.SHIPS[ship][1]):
+					print("Ship board location validated")
 
-	# validate user input ship
-	def validate_input(self, ship_location):
-		if len(ship_location) == 2:
-			if ship_location[0] in 'abcdefghij':
-				if ship_location[1] in '0123456789':
-					return True
-		return False
-
-	# check if ship location exists in the array
-	def check_if_ship_location_exists(self, ship_location):
-		if ship_location in self.board_ship_locations:
+	# validated if ship location
+	def validate_ship_location(self, x, y):
+		if x in range(1,11) and y in range(1, 11):
 			return True
 		return False
 
-	# validate the location if its vertical
-	def validate_vertical_location_on_board(self, ship_length, ship_location):
-		if (int(ship_location) + (ship_length) - 1 <= 10):
-			return True
+	# check if ship location can fit in board
+	def validate_and_add_ship_board_location(self, x, y, ship_length):
+		# check horizontal or vertical
+		if self.horizontal_or_vertical() == "v":
+			if y + ship_length <= 10:
+				self.append_ship_location_vertically(x, y, ship_length)
+				pdb.set_trace()
+		elif self.horizontal_or_vertical() == "h":
+			if x + ship_length <= 10:
+				self.append_ship_location_horizontally(x, y, ship_length)
+				pdb.set_trace()
 		return False
-	
-	# returns the ships's location coordinates
-	def get_vertical_ship_location(self, ship_length, ship_location):
-		ship_location_coordinates = []
-		for y in range(ship_location, ship_location+ship_length+1):
-			ship_location_coordinates.append(y)
-		self.board_ship_locations.append(ship_location_coordinates)
+
+	# checks if user wants to place ship h or v
+	def horizontal_or_vertical(self):
+		while True:
+			direction = input("Do you want to place the ship V or H").lower().strip()
+			if direction == "v":
+				return "v"
+				break
+			elif direction == "h":
+				return "h"
+				break
+			print("You should enter either [v]ertical or [h]orizontal")
+
+
+	# appends to self.list a list of ship's locations horizontally
+	def append_ship_location_horizontally(self, x, y, ship_length):
+		if x + (ship_length - 1) <= 10:
+			for i in range(x, x+ship_length):
+				self.ship_board_locations.append((i,y))
+
+	# appends to self.list a list of ship's locations vertically
+	def append_ship_location_vertically(self, x, y, ship_length):
+		if y + (ship_length - 1) <= 10:
+			for i in range(y, y+ship_length):
+				self.ship_board_locations.append((x,i))
+
+
+
+
+
+
+
+
+
+
+
+
