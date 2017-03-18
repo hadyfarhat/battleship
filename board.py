@@ -18,7 +18,7 @@ class Board():
 	def get_ship_location(self):
 		for ship in range(len(self.SHIPS)):
 			print("Where do you want to place {} ?".format(self.SHIPS[ship]))
-			ship_location_x = int(input("X1: "))
+			ship_location_x = int(input("X1: ")) 
 			ship_location_y	= int(input("Y1: "))
 			if self.validate_ship_location(ship_location_x, ship_location_y):
 				print("Ship location validated")
