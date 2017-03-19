@@ -34,6 +34,7 @@ class Board:
 					# check if ship locations are already in use
 					if self.validate_ship_locations(ship_locations):						
 						print("ship is not in use")
+						print(self.ship_grid)
 						break
 					else:
 						print("can't place ship here ...")
@@ -51,13 +52,24 @@ class Board:
 	# returns an array containing ship locations on board
 	def get_ship_locations(self, ship_location, ship_length):
 		ship_locations = []
+		direction = self.get_ship_direction()
 		# check if user wants to place ships h or v
-		if self.get_ship_direction() == 'h':
+		if direction == 'h':
+			# convert letter to its ascii value
+			# check if it can fit on board
 			if (ord('j') - ord(ship_location[:1])) + 1 >= ship_length:
 				print("ship length can fit on board")
-				for i in range(0, ship_length + 1):					
-					ship_locations.append((int(ship_location[1:]),
-										   chr(ord(ship_location[:1]) + i)))
+				for i in range(0, ship_length):					
+					ship_locations.append(((chr(ord(ship_location[:1]) + i)),
+										   int(ship_location[1:])))
+				return ship_locations
+		elif direction == 'v':
+			# check if it can fit on board
+			if (10 - (int(ship_location[1:]))) + 1 >= ship_length:
+				print("ship length can fit on board")
+				for i in range(0, ship_length):
+					ship_locations.append((ship_location[:1],
+										   int(ship_location[1:]) + i))
 				return ship_locations
 		return None
 
