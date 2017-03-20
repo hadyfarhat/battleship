@@ -2,21 +2,8 @@ import pdb
 
 # imports
 from player import Player
-from board import Board
 
-def play():
-    p = Player()
-
-
-
-SHIP_INFO = [
-    ("Aircraft Carrier", 5),
-    ("Battleship", 4),
-    ("Submarine", 3),
-    ("Cruiser", 3),
-    ("Patrol Boat", 2)
-]
-
+# constants
 BOARD_SIZE = 10
 
 VERTICAL_SHIP = '|'
@@ -27,6 +14,42 @@ HIT = '*'
 SUNK = '#'
 
 letter_board = 'abcdefghij'
+
+
+def play():
+    while len(p1.board.ships) > 0:
+        print("Its {} turn".format(p1.name))
+        attack(p1)
+        # print("Its {} turn".format(p2.name))
+        # attack(player)
+
+# attack boards
+def attack(player):
+    while True:
+        attack_location = input("Where do you want to attack {}?".format(p1.name))
+        if validate_attack(attack_location):
+            print("Your attack is successful!")
+            return attack_location
+            break
+        print("please enter correct attack location (ex: d6")
+    print("{} is attacking".format(player.name))
+
+# validate attack
+def validate_attack(attack_location):
+    if len(attack_location) <= 3:
+        attack_location_x = attack_location[:1]
+        try:
+            attack_location_y = int(attack_location[1:])
+        except ValueError:
+            return False
+        if (attack_location_x in 'abcdefghij' and 
+            attack_location_y in [1,2,3,4,5,6,7,8,9,10]):
+           return True
+    return False
+
+################
+# board related functions
+################
 
 def clear_screen():
     print("\033c", end="")
@@ -60,7 +83,9 @@ def print_board(ship_locations):
         print("\n")
 
 
-
+if __name__ == "__main__":
+    p1 = Player()
+    play()
 
 
 

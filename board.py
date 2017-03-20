@@ -4,9 +4,9 @@ class Board:
     ships = [
         ("Aircraft Carrier", 5),
         ("Battleship", 4),
-        ("Submarine", 3),
-        ("Cruiser", 3),
-        ("Patrol Boat", 2)
+        # ("Submarine", 3),
+        # ("Cruiser", 3),
+        # ("Patrol Boat", 2)
     ]
 
     def __init__(self):
@@ -17,12 +17,16 @@ class Board:
         print("\033c", end="")
 
     # location of all ships related to this object
-    ship_grid = []
 
     # main loop; runs board program
     def set_up(self):
+        self.ship_grid = []
         for ship in range(len(self.ships)):
             while True:
+                # check if ship_grid is empty
+                # if it is: print the board(empty board)
+                if not self.ship_grid:
+                    self.print_board()
                 ship_location = input("Where do you want"
                                       "to place {}".format(self.ships[ship]))
                 # if user input is valid
@@ -83,10 +87,11 @@ class Board:
     def validate_ship_locations(self, ship_locations):
         if ship_locations:
             if self.ship_grid:
-                for ship in self.ship_grid:
-                    for ship_location in ship_locations:
-                        if ship_location in ship:
-                            return False
+                for self_ship in self.ship_grid:
+                    for self_ship_location in self_ship:
+                        for ship_location in ship_locations:
+                            if ship_location[:2] == self_ship_location[:2]:
+                                return False
             self.ship_grid.append(ship_locations)
             return True
         return False
@@ -112,7 +117,7 @@ class Board:
         print("" + " ".join([chr(c) for c in range(ord('A'), ord('A') + 10)]))
 
     # prints the board
-    def print_board(self, ship_locations):
+    def print_board(self, ship_locations=None):
         print("  ", end=' ')
         self.print_board_heading()
         for row in range(1, 11):
@@ -121,10 +126,13 @@ class Board:
             else:
                 print(row, end=' ')
             for x in 'abcdefghij':
-                if (x, row, 'v') in ship_locations:
-                    print('|', end=' ')
-                elif (x, row, 'h') in ship_locations:
-                    print('-', end=' ')
+                if ship_locations:
+                    if (x, row, 'v') in ship_locations:
+                        print('|', end=' ')
+                    elif (x, row, 'h') in ship_locations:
+                        print('-', end=' ')
+                    else:
+                        print('0', end=' ')
                 else:
                     print('0', end=' ')
             print("\n")
