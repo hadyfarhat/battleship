@@ -17,18 +17,22 @@ letter_board = 'abcdefghij'
 
 
 def play():
-    while len(p1.board.ships) > 0:
+    while len(p2.board.ships) > 0:
+        print_board(get_ships_locations(p2.ships))
         print("Its {} turn".format(p1.name))
-        attack(p1)
-        # print("Its {} turn".format(p2.name))
-        # attack(player)
+        player_1_attack = get_attack_location(p1)
+        attack(p2, player_1_attack, p1)
+        print_board(get_ships_locations(p1.ships))
+        print("Its {} turn".format(p2.name))
+        player_2_attack = get_attack_location(p2)
+        attack(p1, player_2_attack, p2)
+        print_board(get_ships_locations(p2.ships))
 
 # attack boards
-def attack(player):
+def get_attack_location(player):
     while True:
         attack_location = input("Where do you want to attack {}?".format(p1.name))
         if validate_attack(attack_location):
-            print("Your attack is successful!")
             return attack_location
             break
         print("please enter correct attack location (ex: d6")
@@ -47,6 +51,21 @@ def validate_attack(attack_location):
            return True
     return False
 
+
+def attack(player_attacked, attack_location, player_attacking):
+    print("{} is attacking {}".format(player_attacking.name, player_attacked.name))
+    hit = False
+    for ship in player_attacked.ships:
+        for i in range(0, len(player_attacked.ships[ship])):
+            if (player_attacked.ships[ship][i][0] == attack_location[0] and 
+                player_attacked.ships[ship][i][1] == int(attack_location[1])):
+                player_attacked.ships[ship][i] += HIT,
+                hit = True
+    if not hit:
+        player_attacking.misses.append(attack_location)
+
+
+
 ################
 # board related functions
 ################
@@ -60,24 +79,26 @@ def print_board_heading():
 
 
 
-def get_ships_locations(player_board_ship_gird):
+def get_ships_locations(player_ships):
     ships_locations = []
-    for ship in player_board_ship_gird:
-        for ship_location in ship:
+    for ship in player_ships:
+        for ship_location in player_ships[ship]:
             ships_locations.append(ship_location)
     return ships_locations
 
 
-def print_board(ship_locations):
+def print_board(ships_locations):
     print("", end=' ')
     print_board_heading()
     for row in range(1, 11):
         print(row, end=' ')
         for x in letter_board:
-            if (x, row, 'v') in ship_locations:
+            if (x, row, 'v') in ships_locations:
                 print(VERTICAL_SHIP, end=' ')
-            elif (x, row, 'h') in ship_locations:
+            elif (x, row, 'h') in ships_locations:
                 print(HORIZONTAL_SHIP, end=' ')
+            elif (x, row, 'h', HIT) in ships_locations or (x, row, 'v', HIT) in ships_locations:
+                print(HIT, end=' ')
             else:
                 print(EMPTY, end=' ')
         print("\n")
@@ -85,6 +106,9 @@ def print_board(ship_locations):
 
 if __name__ == "__main__":
     p1 = Player()
+    clear_screen()
+    p2 = Player()
+    clear_screen()
     play()
 
 
