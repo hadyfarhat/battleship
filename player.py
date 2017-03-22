@@ -2,12 +2,18 @@ from board import Board
 
 class Player:
 	def __init__(self):
-		self.name = input("Enter your name: ")
+		while True:
+			self.name = input("Enter your name: ")
+			if self.name:
+				break
+			print("Please enter your name: ")
+		print("\n")
 		self.board = Board()
 		self.ships = self.put_ship_locations_into_dict(self.board.ship_grid)
 		self.misses = []
 		self.hits = []
 		self.ships_sunk_locations = []
+		self.ships_sunk = 0
 		# self.player_all_ships_locations = get_all_ships_locations(self.board.ship_grid)
 
 	# arrange board ship locations into a dict

@@ -1,4 +1,5 @@
 import pdb
+import sys
 
 # imports
 from player import Player
@@ -17,26 +18,45 @@ letter_board = 'abcdefghij'
 
 
 def play():
-    while len(p2.board.ships) > 0:
-        clear_screen()
-        check_sunk_ships(p1, p2)
-        display_progress_board(p1, p2)
-        print("Its {} turn".format(p1.name))
-        player_1_attack = get_attack_location(p1)
-        attack(p2, player_1_attack, p1)
+    while True:
+        # player 1
+        # pdb.set_trace()
+        next_turn(p1, p2)
+        if check_winner(p1, p2):
+            clear_screen()
+            display_progress_board(p1, p2)
+            print("{} won".format(p1.name))
+            break
         switch_players()
-        clear_screen()
-        check_sunk_ships(p2, p1)
-        display_progress_board(p2, p1)
-        print("Its {} turn".format(p2.name))
-        player_2_attack = get_attack_location(p2)
-        attack(p1, player_2_attack, p2)
+        # player 2
+        next_turn(p2, p1)
+        if check_winner(p2, p1):
+            clear_screen()
+            display_progress_board(p2, p1)
+            print("{} won".format(p2.name))
+            break
         switch_players()
+
+def next_turn(player_attacking, player_attacked):
+    clear_screen()
+    check_sunk_ships(player_attacking, player_attacked)
+    display_progress_board(player_attacking, player_attacked)
+    print("Its {}'s turn".format(player_attacking.name))
+    print("{} is attacking {}".format(player_attacking.name, player_attacked.name))
+    player_attack = get_attack_location(player_attacking)
+    attack(player_attacked, player_attack, player_attacking)
+    check_sunk_ships(player_attacking, player_attacked)
+    
+
+def check_winner(player_attacking, player_attacked):
+    if player_attacked.ships_sunk == 2:
+        return True
+    return False
 
 # attack boards
 def get_attack_location(player):
     while True:
-        attack_location = input("Where do you want to attack {}?".format(p1.name))
+        attack_location = input("Where do you want to attack {}?".format(player.name))
         if validate_attack(attack_location):
             return attack_location
             break
@@ -58,7 +78,6 @@ def validate_attack(attack_location):
 
 # attack player
 def attack(player_attacked, attack_location, player_attacking):
-    print("{} is attacking {}".format(player_attacking.name, player_attacked.name))
     hit = False
     # convert attack location into a tuple of proper values
     attack_location_2 = (attack_location[0], int(attack_location[1]))
@@ -111,7 +130,7 @@ def print_board(ships_locations):
 
 # display board with hits, misse, empty and sunk
 def display_progress_board(player_attacking, player_attacked):
-    print("Board Progress")
+    print("{}'s Board Progress".format(player_attacking.name))
     print(20*"-")
     print("\n")
     print(" ", end=' ')
@@ -120,18 +139,17 @@ def display_progress_board(player_attacking, player_attacked):
         print(row, end=' ')
         for x in letter_board:
             # check if their any location of a sunk ship
-            if player_attacked.ships_sunk_locations:
+            # if player_attacked.ships_sunk_locations:
                 # for ship_sunk in player_attacked.ships_sunk:
-                if (x,row) in player_attacked.ships_sunk_locations:
-                    print(SUNK, end=' ')
+            if (x,row) in player_attacked.ships_sunk_locations:
+                print(SUNK, end=' ')
+            else:
+                if (x, row) in player_attacking.hits:
+                    print(HIT, end=' ')
+                elif (x, row) in player_attacking.misses:
+                    print(MISS, end=' ')
                 else:
                     print(EMPTY, end=' ')
-            elif (x, row) in player_attacking.hits:
-                print(HIT, end=' ')
-            elif (x, row) in player_attacking.misses:
-                print(MISS, end=' ')
-            else:
-                print(EMPTY, end=' ')
         print("\n")
 
 def switch_players():
@@ -142,16 +160,21 @@ def check_sunk_ships(player_attacking, player_attacked):
     for ship in player_attacked.ships:
         ship_sunk = True
         for ship_location in player_attacked.ships[ship]:
-            if ship_location[:2] not in player_attacking.hits:
+            # hits(c,5) ship_location(c,5) 
+            if (ship_location[:2] not in player_attacking.hits or
+                ship_location[:2] in player_attacked.ships_sunk_locations):
                 ship_sunk = False
         if ship_sunk:
+            player_attacked.ships_sunk += 1
             for ship_sunk_location in player_attacked.ships[ship]:
                 player_attacked.ships_sunk_locations.append(ship_sunk_location[:2])
 
 if __name__ == "__main__":
     p1 = Player()
+    switch_players()
     clear_screen()
     p2 = Player()
+    switch_players()
     clear_screen()
     play()
  

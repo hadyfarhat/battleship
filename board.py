@@ -2,10 +2,10 @@ import pdb
 
 class Board:
     ships = [
-        # ("Aircraft Carrier", 5),
-        # ("Battleship", 4),
-        # ("Submarine", 3),
-        # ("Cruiser", 3),
+        ("Aircraft Carrier", 5),
+        ("Battleship", 4),
+        ("Submarine", 2),
+        ("Cruiser", 2),
         ("Patrol Boat", 2)
     ]
 
@@ -28,7 +28,7 @@ class Board:
                 if not self.ship_grid:
                     self.print_board()
                 ship_location = input("Where do you want"
-                                      "to place {}".format(self.ships[ship]))
+                                      " to place {}".format(self.ships[ship]))
                 # if user input is valid
                 if self.validate_user_input(ship_location):
                     # get ship locations
