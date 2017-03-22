@@ -1,6 +1,3 @@
-import pdb
-import sys
-
 # imports
 from player import Player
 
@@ -37,31 +34,36 @@ def play():
             break
         switch_players()
 
+
 def next_turn(player_attacking, player_attacked):
     clear_screen()
     check_sunk_ships(player_attacking, player_attacked)
     display_progress_board(player_attacking, player_attacked)
     print("Its {}'s turn".format(player_attacking.name))
-    print("{} is attacking {}".format(player_attacking.name, player_attacked.name))
+    print("{} is attacking {}".format(player_attacking.name,
+                                      player_attacked.name))
     player_attack = get_attack_location(player_attacking)
     attack(player_attacked, player_attack, player_attacking)
     check_sunk_ships(player_attacking, player_attacked)
-    
+
 
 def check_winner(player_attacking, player_attacked):
     if player_attacked.ships_sunk == 2:
         return True
     return False
 
+
 # attack boards
 def get_attack_location(player):
     while True:
-        attack_location = input("Where do you want to attack {}?".format(player.name))
+        attack_location = input("Where do you want to attack {}?".format(
+                                                                player.name))
         if validate_attack(attack_location):
             return attack_location
             break
         print("please enter correct attack location (ex: d6")
     print("{} is attacking".format(player.name))
+
 
 # validate attack
 def validate_attack(attack_location):
@@ -71,10 +73,11 @@ def validate_attack(attack_location):
             attack_location_y = int(attack_location[1:])
         except ValueError:
             return False
-        if (attack_location_x in 'abcdefghij' and 
-            attack_location_y in [1,2,3,4,5,6,7,8,9,10]):
-           return True
+        if (attack_location_x in 'abcdefghij' and
+                attack_location_y in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]):
+            return True
     return False
+
 
 # attack player
 def attack(player_attacked, attack_location, player_attacking):
@@ -90,19 +93,19 @@ def attack(player_attacked, attack_location, player_attacking):
     if not hit:
         player_attacking.misses.append(attack_location_2)
 
-
-
 ################
 # board related functions
 ################
+
 
 def clear_screen():
     print("\033c", end="")
 
 
 def print_board_heading():
-    print("" + " ".join([chr(c) for c in range(ord('A'), ord('A') + BOARD_SIZE)]))
-
+    print(
+        "" + " ".join([chr(c) for c in range(ord('A'), ord('A') + BOARD_SIZE)])
+        )
 
 
 def get_ships_locations(player_ships):
@@ -128,6 +131,7 @@ def print_board(ships_locations):
                 print(EMPTY, end=' ')
         print("\n")
 
+
 # display board with hits, misse, empty and sunk
 def display_progress_board(player_attacking, player_attacked):
     print("{}'s Board Progress".format(player_attacking.name))
@@ -141,7 +145,7 @@ def display_progress_board(player_attacking, player_attacked):
             # check if their any location of a sunk ship
             # if player_attacked.ships_sunk_locations:
                 # for ship_sunk in player_attacked.ships_sunk:
-            if (x,row) in player_attacked.ships_sunk_locations:
+            if (x, row) in player_attacked.ships_sunk_locations:
                 print(SUNK, end=' ')
             else:
                 if (x, row) in player_attacking.hits:
@@ -152,22 +156,27 @@ def display_progress_board(player_attacking, player_attacked):
                     print(EMPTY, end=' ')
         print("\n")
 
+
+# wait for player to switch laptops and hit return
 def switch_players():
     input("Switch laptops and press Enter/Return......")
+
 
 # check if player being attacked has any sunk ships
 def check_sunk_ships(player_attacking, player_attacked):
     for ship in player_attacked.ships:
         ship_sunk = True
         for ship_location in player_attacked.ships[ship]:
-            # hits(c,5) ship_location(c,5) 
+            # hits(c,5) ship_location(c,5)
             if (ship_location[:2] not in player_attacking.hits or
-                ship_location[:2] in player_attacked.ships_sunk_locations):
+                    ship_location[:2] in player_attacked.ships_sunk_locations):
                 ship_sunk = False
         if ship_sunk:
             player_attacked.ships_sunk += 1
             for ship_sunk_location in player_attacked.ships[ship]:
-                player_attacked.ships_sunk_locations.append(ship_sunk_location[:2])
+                player_attacked.ships_sunk_locations.append(
+                                                        ship_sunk_location[:2])
+
 
 if __name__ == "__main__":
     p1 = Player()
@@ -177,10 +186,3 @@ if __name__ == "__main__":
     switch_players()
     clear_screen()
     play()
- 
-
-
-
-
-
-

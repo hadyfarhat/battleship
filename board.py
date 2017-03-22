@@ -1,4 +1,3 @@
-import pdb  
 
 class Board:
     ships = [
@@ -28,20 +27,24 @@ class Board:
                 if not self.ship_grid:
                     self.print_board()
                 ship_location = input("Where do you want"
-                                      " to place {}".format(self.ships[ship]))
+                                      " to place {}".format(
+                                            self.ships[ship])).strip().lower()
                 # if user input is valid
                 if self.validate_user_input(ship_location):
                     # get ship locations
-                    ship_locations = self.get_ship_locations(ship_location,
-                                                            int(self.ships[ship][1]))
+                    ship_locations = self.get_ship_locations(
+                                                    ship_location,
+                                                    int(self.ships[ship][1]))
                     # check if ship locations are already in use
                     if self.validate_ship_locations(ship_locations):
                         self.clear_screen()
-                        self.print_board(self.get_ships_locations(self.ship_grid))
+                        self.print_board(self.get_ships_locations(
+                                                            self.ship_grid))
                         break
                     else:
                         print("can't place ship here ...")
                 else:
+                    self.clear_screen()
                     print("Please enter correct input")
 
     # validate user input
@@ -52,9 +55,9 @@ class Board:
                 ship_location_y = int(ship_location[1:])
             except ValueError:
                 return False
-            if (ship_location_x in 'abcdefghij' and 
-                ship_location_y in [1,2,3,4,5,6,7,8,9,10]):
-               return True
+            if (ship_location_x in 'abcdefghij' and
+                    ship_location_y in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]):
+                return True
         return False
 
     # returns an array containing ship locations on board
@@ -67,7 +70,7 @@ class Board:
             # check if it can fit on board
             if (ord('j') - ord(ship_location[:1])) + 1 >= ship_length:
                 print("ship length can fit on board")
-                for i in range(0, ship_length):                 
+                for i in range(0, ship_length):
                     ship_locations.append(((chr(ord(ship_location[:1]) + i)),
                                            int(ship_location[1:]),
                                            'h'))
@@ -144,5 +147,3 @@ class Board:
             for ship_location in ship:
                 ships_locations.append(ship_location)
         return ships_locations
-
-
