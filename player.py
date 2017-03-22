@@ -6,6 +6,8 @@ class Player:
 		self.board = Board()
 		self.ships = self.put_ship_locations_into_dict(self.board.ship_grid)
 		self.misses = []
+		self.hits = []
+		self.ships_sunk_locations = []
 		# self.player_all_ships_locations = get_all_ships_locations(self.board.ship_grid)
 
 	# arrange board ship locations into a dict
@@ -19,12 +21,4 @@ class Player:
 			count += 1
 		return player_ships
 
-	# get all ship locations into a single array
-	# def get_all_ships_locations(self, ship_grid):
-	# 	all_ships_locations = []
-	# 	for ship in ship_grid:
-	# 		for ship_location in ship:
-	# 			all_ships_locations.append(ship_location)
-	# 	return all_ships_locations
-	
 
