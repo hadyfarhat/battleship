@@ -24,8 +24,11 @@ class Board:
             while True:
                 # check if ship_grid is empty
                 # if it is: print the board(empty board)
+                self.clear_screen()
                 if not self.ship_grid:
                     self.print_board()
+                else:
+                    self.print_board(self.get_ships_locations(self.ship_grid))
                 ship_location = input("Where do you want"
                                       " to place {}".format(
                                             self.ships[ship])).strip().lower()
@@ -37,15 +40,14 @@ class Board:
                                                     int(self.ships[ship][1]))
                     # check if ship locations are already in use
                     if self.validate_ship_locations(ship_locations):
-                        self.clear_screen()
                         self.print_board(self.get_ships_locations(
                                                             self.ship_grid))
                         break
                     else:
                         print("can't place ship here ...")
-                else:
-                    self.clear_screen()
-                    print("Please enter correct input")
+                input("Please enter correct input. "
+                      "Press any key to try again")
+        self.clear_screen()
 
     # validate user input
     def validate_user_input(self, ship_location):

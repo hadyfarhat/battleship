@@ -21,7 +21,7 @@ def play():
         next_turn(p1, p2)
         if check_winner(p1, p2):
             clear_screen()
-            display_progress_board(p1, p2)
+            display_my_progress_board(p1, p2)
             print("{} won".format(p1.name))
             break
         switch_players()
@@ -29,7 +29,7 @@ def play():
         next_turn(p2, p1)
         if check_winner(p2, p1):
             clear_screen()
-            display_progress_board(p2, p1)
+            display_my_progress_board(p2, p1)
             print("{} won".format(p2.name))
             break
         switch_players()
@@ -38,17 +38,21 @@ def play():
 def next_turn(player_attacking, player_attacked):
     clear_screen()
     check_sunk_ships(player_attacking, player_attacked)
-    display_progress_board(player_attacking, player_attacked)
-    print("Its {}'s turn".format(player_attacking.name))
-    print("{} is attacking {}".format(player_attacking.name,
-                                      player_attacked.name))
+    display_my_progress_board(player_attacking, player_attacked)
+    print(20*"=")
+    display_opp_progress_board(player_attacking,
+                               player_attacked,
+                               get_ships_locations(player_attacking.ships))
+    # print("Its {}'s turn".format(player_attacking.name))
+    # print("{} is attacking {}".format(player_attacking.name,
+    #                                   player_attacked.name))
     player_attack = get_attack_location(player_attacking)
     attack(player_attacked, player_attack, player_attacking)
     check_sunk_ships(player_attacking, player_attacked)
 
 
 def check_winner(player_attacking, player_attacked):
-    if player_attacked.ships_sunk == 2:
+    if player_attacked.ships_sunk == 5:
         return True
     return False
 
@@ -118,7 +122,7 @@ def get_ships_locations(player_ships):
 
 # display each player's board
 def print_board(ships_locations):
-    print("", end=' ')
+    print(" ", end=' ')
     print_board_heading()
     for row in range(1, 11):
         print(row, end=' ')
@@ -133,7 +137,7 @@ def print_board(ships_locations):
 
 
 # display board with hits, misse, empty and sunk
-def display_progress_board(player_attacking, player_attacked):
+def display_my_progress_board(player_attacking, player_attacked):
     print("{}'s Board Progress".format(player_attacking.name))
     print(20*"-")
     print("\n")
@@ -152,6 +156,31 @@ def display_progress_board(player_attacking, player_attacked):
                     print(HIT, end=' ')
                 elif (x, row) in player_attacking.misses:
                     print(MISS, end=' ')
+                else:
+                    print(EMPTY, end=' ')
+        print("\n")
+
+
+# display the opponents progress
+def display_opp_progress_board(player_attacking,
+                               player_attacked,
+                               player_attacking_ships):
+    print(" ", end=' ')
+    print_board_heading()
+    for row in range(1, 11):
+        print(row, end=' ')
+        for x in letter_board:
+            if (x, row) in player_attacking.ships_sunk_locations:
+                print(SUNK, end=' ')
+            else:
+                if (x, row) in player_attacked.hits:
+                    print(HIT, end=' ')
+                elif (x, row) in player_attacked.misses:
+                    print(MISS, end=' ')
+                elif (x, row, 'v') in player_attacking_ships:
+                    print(VERTICAL_SHIP, end=' ')
+                elif (x, row, 'h') in player_attacking_ships:
+                        print(HORIZONTAL_SHIP, end=' ')
                 else:
                     print(EMPTY, end=' ')
         print("\n")
