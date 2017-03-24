@@ -1,10 +1,10 @@
 
 class Board:
     ships = [
-        # ("Aircraft Carrier", 5),
-        # ("Battleship", 4),
-        # ("Submarine", 2),
-        # ("Cruiser", 2),
+        ("Aircraft Carrier", 5),
+        ("Battleship", 4),
+        ("Submarine", 2),
+        ("Cruiser", 2),
         ("Patrol Boat", 2)
     ]
 

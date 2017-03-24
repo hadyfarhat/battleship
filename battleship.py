@@ -1,4 +1,3 @@
-import pdb
 from player import Player
 
 # constants
