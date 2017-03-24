@@ -1,10 +1,10 @@
 
 class Board:
     ships = [
-        ("Aircraft Carrier", 5),
-        ("Battleship", 4),
-        ("Submarine", 2),
-        ("Cruiser", 2),
+        # ("Aircraft Carrier", 5),
+        # ("Battleship", 4),
+        # ("Submarine", 2),
+        # ("Cruiser", 2),
         ("Patrol Boat", 2)
     ]
 
@@ -30,7 +30,7 @@ class Board:
                 else:
                     self.print_board(self.get_ships_locations(self.ship_grid))
                 ship_location = input("Where do you want"
-                                      " to place {}".format(
+                                      " to place {}: ".format(
                                             self.ships[ship])).strip().lower()
                 # if user input is valid
                 if self.validate_user_input(ship_location):
@@ -46,7 +46,7 @@ class Board:
                     else:
                         print("can't place ship here ...")
                 input("Please enter correct input. "
-                      "Press any key to try again")
+                      "Press any key to try again ")
         self.clear_screen()
 
     # validate user input
@@ -106,7 +106,7 @@ class Board:
         while True:
             ship_direction = input("Do you want to place ship"
                                    "[H]orizontally or "
-                                   "[V]erticlaly ?").strip().lower()
+                                   "[V]erticlaly ? ").strip().lower()
             if ship_direction == 'v':
                 return 'v'
             elif ship_direction == 'h':

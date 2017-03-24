@@ -1,4 +1,4 @@
-# imports
+import pdb
 from player import Player
 
 # constants
@@ -43,16 +43,13 @@ def next_turn(player_attacking, player_attacked):
     display_opp_progress_board(player_attacking,
                                player_attacked,
                                get_ships_locations(player_attacking.ships))
-    # print("Its {}'s turn".format(player_attacking.name))
-    # print("{} is attacking {}".format(player_attacking.name,
-    #                                   player_attacked.name))
     player_attack = get_attack_location(player_attacking)
     attack(player_attacked, player_attack, player_attacking)
     check_sunk_ships(player_attacking, player_attacked)
 
 
 def check_winner(player_attacking, player_attacked):
-    if player_attacked.ships_sunk == 5:
+    if player_attacked.ships_sunk == 1:
         return True
     return False
 
@@ -60,12 +57,13 @@ def check_winner(player_attacking, player_attacked):
 # attack boards
 def get_attack_location(player):
     while True:
-        attack_location = input("Where do you want to attack {}?".format(
-                                                                player.name))
+        attack_location = input("Where do you want "
+                                "to attack "
+                                "{}? ".format(player.name)).strip().lower()
         if validate_attack(attack_location):
             return attack_location
             break
-        print("please enter correct attack location (ex: d6")
+        print("please enter correct attack location (ex: d6): ")
     print("{} is attacking".format(player.name))
 
 
@@ -87,7 +85,8 @@ def validate_attack(attack_location):
 def attack(player_attacked, attack_location, player_attacking):
     hit = False
     # convert attack location into a tuple of proper values
-    attack_location_2 = (attack_location[0], int(attack_location[1]))
+    # pdb.set_trace()
+    attack_location_2 = (attack_location[0], int(attack_location[1:]))
     for ship in player_attacked.ships:
         for i in range(0, len(player_attacked.ships[ship])):
             # check if attack location and ship_location match
@@ -196,6 +195,7 @@ def check_sunk_ships(player_attacking, player_attacked):
     for ship in player_attacked.ships:
         ship_sunk = True
         for ship_location in player_attacked.ships[ship]:
+            # pdb.set_trace()
             # hits(c,5) ship_location(c,5)
             if (ship_location[:2] not in player_attacking.hits or
                     ship_location[:2] in player_attacked.ships_sunk_locations):
